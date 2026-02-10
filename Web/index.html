@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para ti</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f1f4;
+      --text: #6b1f3b;
+      --soft: #8a4a62;
+      --accent: #c06c84;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    section {
+      min-height: 100vh;
+      padding: 4rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 700px;
+      text-align: center;
+    }
+
+    h1, h2 {
+      font-family: 'Dancing Script', cursive;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2.1rem; }
+
+    p {
+      font-size: 1.1rem;
+      color: var(--soft);
+      margin-bottom: 1.6rem;
+    }
+
+    .fade {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1.5s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.5s; }
+    .delay-2 { animation-delay: 1s; }
+    .delay-3 { animation-delay: 1.5s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .final {
+      font-size: 2.3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .countdown {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      color: var(--soft);
+    }
+
+    button {
+      background: none;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.8rem 2.2rem;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--accent);
+      color: var(--bg);
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    footer {
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sección 1 -->
+  <section>
+    <div class="container">
+      <h1 class="fade">Luz, no estás aquí conmigo…</h1>
+      <p class="fade delay-1">pero estás conmigo de una forma que no sabe de distancias.</p>
+    </div>
+  </section>
+
+  <!-- Sección 2 -->
+  <section>
+    <div class="container">
+      <p class="fade">
+        Amar a la distancia no es fácil, y nunca voy a fingir que lo es.
+        Hay días en los que quisiera acortar los kilómetros con solo pensarte,
+        y noches en las que tu ausencia pesa más de lo que digo.
+      </p>
+      <p class="fade delay-1">
+        Pero incluso así, incluso lejos,
+        sigues siendo el lugar al que quiero volver.
+      </p>
+    </div>
+  </section>
+
+  <!-- Sección 3 -->
+  <section>
+    <div class="container">
+      <p class="fade">
+        Contigo aprendí que amar también es esperar,
+        confiar cuando no puedo ver,
+        y elegirte incluso cuando lo fácil sería rendirse.
+      </p>
+      <p class="fade delay-1">
+        No te amo por la cercanía,
+        te amo por lo que provocas en mí,
+        por la calma, por la ilusión,
+        por la certeza silenciosa de que eres tú.
+      </p>
+    </div>
+  </section>
+
+  <!-- Sección 4 -->
+  <section>
+    <div class="container">
+      <h2 class="fade">Así que hoy quiero preguntarte algo</h2>
+      <p class="fade delay-1">
+        No como una fecha en el calendario,
+        sino como alguien que te elige todos los días.
+      </p>
+      <div class="fade delay-2">
+        <div class="final">Luz, ¿quieres ser mi San Valentín?</div>
+        <div class="countdown" id="countdown"></div>
+        <button onclick="celebrate()">💖 Sí, quiero</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Hecho con amor, incluso a la distancia.
+  </footer>
+
+<canvas id="confetti"></canvas>
+
+<script>
+  const targetDate = new Date(new Date().getFullYear(), 1, 14, 0, 0, 0);
+  const countdownEl = document.getElementById('countdown');
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      countdownEl.textContent = 'Hoy es el día 💖';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+    countdownEl.textContent = `Faltan ${days} días, ${hours} horas y ${minutes} minutos`;
+  }
+
+  setInterval(updateCountdown, 60000);
+  updateCountdown();
+
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let pieces = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function celebrate() {
+    pieces = Array.from({ length: 140 }, () => ({
+      x: Math.random() * canvas.width,
+      y: -20,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 5 + 5,
+      color: `hsl(${Math.random() * 360}, 70%, 75%)`
+    }));
+    animate();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      ctx.beginPath();
+      ctx.fillStyle = p.color;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      p.y += p.d;
+    });
+    pieces = pieces.filter(p => p.y < canvas.height);
+    if (pieces.length > 0) requestAnimationFrame(animate);
+  }
+</script>
+
+</body>
+</html>
